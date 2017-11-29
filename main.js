@@ -1,33 +1,40 @@
-var MAP_WIDTH = 10;
-var MAP_HEIGHT = 10;
-
+var MAP_WIDTH = 193;
+var MAP_HEIGHT = 40;
+var TILES = ["X"," ","~"];
+var display = document.getElementById("game");
+console.log(display);
 function tile(color,character) {
 	this.color = color;
 	this.character = character;
 }
 function draw(arrMap) {
-	var display = document.getElementById("game");
 	display.innerHTML = "";
 	var textNode;
+	var line;
 	for(var i = 0; i < MAP_HEIGHT; i++) {
-		var line = "";
+		line = "";
 		for(var j = 0; j < MAP_WIDTH; j++) {
-			line += arrMap[i][j].character;
+			line += "<span style=\"color:" + arrMap[i][j].color + "\">" + arrMap[i][j].character + "</span>";			//add character from map array to line
 		}
-		textNode = document.createTextNode(line);
-		display.appendChild(textNode);
-		if(i != MAP_HEIGHT - 1) {
-			var br = document.createElement("br");
-			display.appendChild(br);
-		}
+		line += "\n";
+		display.innerHTML += line;
 	}
 }
 var map = [];
-for(var i = 0; i < MAP_HEIGHT; i++) {
-	map[i] = [];
-	for(var j = 0; j < MAP_WIDTH; j++) {
-		map[i][j] = new tile("#FF0000","" + i + j);
+function generateMap() {
+	for(var i = 0; i < MAP_HEIGHT; i++) {
+		map[i] = [];
+		for(var j = 0; j < MAP_WIDTH; j++) {
+			map[i][j] = new tile("#FF0000",TILES[Math.floor(Math.random() * TILES.length)]);
+		}
 	}
 }
 
-var gameInterval = setInterval(function() {draw(map);}, 5);
+
+function gameLoop() {
+	generateMap();
+	draw(map);
+}
+//draw(map);
+
+var gameInterval = setInterval(function() {gameLoop();}, 1000);
